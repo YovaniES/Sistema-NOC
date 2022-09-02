@@ -1,0 +1,308 @@
+<div style="display: flex">
+  <div class="flex-1"></div>
+  <div class="modal-title c-male"> {{DATA_HARDWARE ? 'Actualizar' : 'Crear'}} evento </div>
+    <div class="flex-1"></div>
+
+    <button (click)="close()" class="icon-btn btn-trans c-orange moda-close-btn">
+      <mat-icon>close</mat-icon>
+    </button>
+</div>
+
+<form class="row g-3" [formGroup]="hardwareForm">
+  <div class="cli-form newvac-wrapper">
+    <div class="chart-draw">
+
+      <!-- DATOS DEL HARDWARE ------------------------------------------------------------------------->
+      <div class="pr-subtitle mt-2">Datos del evento</div>
+      <div class="pr-section mb-3">
+        <div class="pr-module-container">
+          <div class="row g-3">
+
+            <div class="col-sm-3 cli-form-element">
+              <label>Tipo de evento *</label>
+              <select class="cli-input-white" formControlName="tipo">
+                <option [value]="0" disabled>- Seleccione -</option>
+                <option [value]="tipo.id" *ngFor="let tipo of listTipos">{{ tipo.nombre }}</option>
+              </select>
+              <small class="text-alert" *ngIf="campoNoValido('tipo')">* Ingrese el Tipo es obligatorio</small>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <label>Prioridad *</label>
+              <select class="cli-input-white" formControlName="marca">
+                <option [value]="0" disabled>- Seleccione -</option>
+                <option [value]="marca.id" *ngFor="let marca of listMarca">{{ marca.nombre }}</option>
+              </select>
+              <small class="text-alert" *ngIf="campoNoValido('marca')">* Ingrese la Marca es obligatorio</small>
+            </div>
+
+
+            <div class="col-sm-3 cli-form-element">
+              <label>Descripción</label>
+              <input
+                type="text"
+                class="form-control cli-input-white"
+                formControlName="imei"/>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <div class="form-group">
+                <label>Estado *</label>
+                <input
+                  type="text"
+                  class="form-control cli-input-white"
+                  formControlName="modelo"/>
+                <small class="text-alert" *ngIf="campoNoValido('modelo')">* Ingrese el Modelo es obligatorio</small>
+              </div>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <div class="form-group">
+                <label>Motivo *</label>
+                <input
+                  type="text"
+                  class="form-control cli-input-white"
+                  formControlName="modelo"/>
+                <small class="text-alert" *ngIf="campoNoValido('modelo')">* Ingrese el Modelo es obligatorio</small>
+              </div>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <div class="form-group">
+                <label>Plataforma/Aplicación *</label>
+                <input
+                  type="text"
+                  class="form-control cli-input-white"
+                  formControlName="modelo"/>
+                <small class="text-alert" *ngIf="campoNoValido('modelo')">* Ingrese el Modelo es obligatorio</small>
+              </div>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <label>Servicios afectados</label>
+              <input
+                type="text"
+                class="form-control cli-input-white"
+                formControlName="imei"/>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <label>Hora deteción</label>
+              <input type="time"
+                  class="form-control"
+                  formControlName="fechaNacimiento"/>
+            </div>
+
+
+            <div class="col-sm-3 cli-form-element">
+              <label>Hora de Inicio</label>
+              <input type="time"
+                  class="form-control"
+                  formControlName="fechaNacimiento"/>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <label>Hora Notificación</label>
+              <input type="time"
+                  class="form-control"
+                  formControlName="fechaNacimiento"/>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <label>Modo notificación *</label>
+              <select class="cli-input-white" formControlName="marca">
+                <option [value]="0" disabled>- Seleccione -</option>
+                <option [value]="marca.id" *ngFor="let marca of listMarca">{{ marca.nombre }}</option>
+              </select>
+              <small class="text-alert" *ngIf="campoNoValido('marca')">* Ingrese la Marca es obligatorio</small>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <label>Notificado a:</label>
+              <input
+                type="text"
+                class="form-control cli-input-white"
+                formControlName="imei"/>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <label>Fecha Fin</label>
+              <input type="date"
+                  class="form-control"
+                  formControlName="fechaNacimiento"/>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <label>Hora Fin</label>
+              <input type="time"
+                  class="form-control"
+                  formControlName="fechaNacimiento"/>
+            </div>
+            </div>
+        </div>
+      </div>
+
+      <!-- INCIDENCIAS ------------------------------------------------------------------------->
+      <!-- <div *ngIf="DATA_HARDWARE"> -->
+        <div class="pr-subtitle mt-1">Incidencias</div>
+        <div class="pr-section mb-3">
+          <div class="pr-module-container">
+            <div class="row">
+
+
+            <div class="col-sm-3 cli-form-element">
+              <label>Ticket generado</label>
+              <input
+                type="text"
+                class="form-control cli-input-white"
+                formControlName="imei"/>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <label>Hora de generación</label>
+              <input type="time"
+                  class="form-control"
+                  formControlName="fechaNacimiento"/>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <div class="form-group">
+                <label>Estado de Ticket</label>
+                <input
+                  type="text"
+                  class="form-control cli-input-white"
+                  formControlName="modelo"/>
+                <small class="text-alert" *ngIf="campoNoValido('modelo')">* Ingrese el Modelo es obligatorio</small>
+              </div>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <div class="form-group">
+                <label>Área responsable *</label>
+                <input
+                  type="text"
+                  class="form-control cli-input-white"
+                  formControlName="modelo"/>
+                <small class="text-alert" *ngIf="campoNoValido('modelo')">* Ingrese el Modelo es obligatorio</small>
+              </div>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <label>Hora de resolución</label>
+              <input type="time"
+                  class="form-control"
+                  formControlName="fechaNacimiento"/>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <label>PBI</label>
+              <input
+                type="text"
+                class="form-control cli-input-white"
+                formControlName="imei"/>
+            </div>
+
+            <div class="col-sm-3 cli-form-element">
+              <label>ETA PBI</label>
+              <input
+                type="text"
+                class="form-control cli-input-white"
+                formControlName="imei"/>
+            </div>
+
+
+
+            </div>
+          </div>
+      </div>
+
+      <!-- MOTIVOS Y COMENTARIOS ------------------------------------------------------------------------->
+      <!-- <div *ngIf="DATA_HARDWARE"> -->
+        <div class="pr-subtitle mt-1">Motivos - Comentarios</div>
+        <div class="pr-section mb-3">
+          <div class="pr-module-container">
+            <div class="row">
+              <div class="col-sm-6 cli-form-element">
+                <label>Motivo</label>
+                <textarea
+                  class="form-control"
+                  style="background-image: none; border-color: #a5a4a4; font-size: 14px;"
+                  rows="3"
+                  placeholder="Describa alguna Motivo del evento"
+                  formControlName="observacion">
+                </textarea>
+              </div>
+
+              <div class="col-sm-6 cli-form-element">
+                <label>Comentatios Generales</label>
+                <textarea
+                  class="form-control"
+                  style="background-image: none; border-color: #a5a4a4; font-size: 14px;"
+                  rows="3"
+                  placeholder="Describa alguna Comentario del evento"
+                  formControlName="observacion">
+                </textarea>
+              </div>
+            </div>
+          </div>
+      </div>
+
+
+
+
+      <!-- HISTORICO DE HARDWARE ------------------------------------------------------------------------->
+      <!-- <div *ngIf="DATA_HARDWARE"> -->
+        <div class="pr-subtitle mt-2">Histórico de cambios</div>
+        <div class="pr-section mb-3">
+          <div class="pr-module-container">
+            <div style="overflow: auto; min-height: 100px; max-height: 160px;">
+              <table class="cli-table stripedtable underlinedtable">
+                <thead>
+                  <tr class="bgc-turquey c-white">
+                    <th>#</th>
+                    <th>Estado</th>
+                    <th>Motivo</th>
+                    <th>Fecha y hora</th>
+                    <th>Usuario</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr *ngFor="let cambios of histHardareByPersonal; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td class="w300">{{ cambios.persona }}</td>
+                    <td>{{ cambios.proyecto }}</td>
+                    <td class="w100">{{ cambios.fecha_asignacion }}</td>
+                    <td>{{ cambios.usuario_asignacion }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div class="cli-loader" *ngIf="loadingItem">
+                <mat-spinner style="margin-right: 20px" diameter="20"></mat-spinner>cargando...
+              </div>
+
+              <div
+                *ngIf="!loadingItem && histHardareByPersonal.length == 0"
+                class="cli-loader mt-2"
+                style="color: #c9c9c9"
+                >Aquí se mostrará el histórico del cambios de Estado del evento...
+              </div>
+            </div>
+          </div>
+        </div>
+      <!-- </div> -->
+    </div>
+
+    <!-- --------------------------------------------BOTONES ------------------------------------------>
+    <div class="cli-form-buttons" style="margin-top: 8%">
+      <button class="cli-btn btn-m btn-cancel" type="submit" (click)="close()">
+        <mat-icon class="icon-18">cancel</mat-icon> Cancelar
+      </button>
+      <button class="cli-btn btn-m btn-blue"
+              (click)="crearOactualizarHardware()"
+              [disabled]="hardwareForm.invalid"
+              ><mat-icon class="icon-18">save</mat-icon> {{actionBtn}}
+      </button>
+    </div>
+  </div>
+</form>

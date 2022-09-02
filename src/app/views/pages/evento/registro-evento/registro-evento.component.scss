@@ -1,0 +1,89 @@
+@import "variables.scss";
+
+.modal-title {
+  font-size: 1.9rem;
+  font-weight: 500;
+  margin: 10px 0;
+  text-align: left;
+}
+
+.cli-loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  width: 100%;
+}
+
+.total {
+  color: #97999b;
+  font-size: 18px;
+  font-weight: 550;
+}
+
+.w100 {
+  width: 100px;
+  height: 58px;
+}
+
+.w350 {
+  width: 350px;
+}
+
+.c-green-export {
+  color: #029d55;
+  border: solid 0.5px #00db75;
+}
+
+.date-rango {
+  color: #5c5c5c;
+  font-size: 10px;
+  font-weight: 400;
+}
+
+// Estilos Adjuntar Archivos
+.fileatt {
+  &-cont {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+    padding: 5px;
+    border: dashed 1px $color-grey-3;
+  }
+  &-btn {
+    margin: 2px;
+    display: flex;
+    align-items: center;
+    color: $color-green;
+    background-color: $color-grey-1;
+    border: none;
+    border-radius: 2px;
+  }
+  margin: 2px 3px;
+  padding: 2px 5px;
+  border-radius: 2px;
+  background-color: $color-grey-1;
+  display: flex;
+  align-items: center;
+}
+
+.label {
+  padding: 1px 6px;
+  line-height: 13px;
+  color: #fff;
+  font-weight: 400;
+  border-radius: 4px;
+  font-size: 75%;
+  background-color: #398bf7;
+  width: 190px;
+}
+
+.estado-danger {
+  background-color: #ff727f;
+}
+.estado-info {
+  background-color: #20c997;
+}
+
+@media (max-width: 850px) {
+}
