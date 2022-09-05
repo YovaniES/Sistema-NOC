@@ -13,102 +13,53 @@ export class MenuMobileComponent implements OnInit {
   subMenuActive: boolean = false;
   subMenuTitle: string = '';
   active: boolean = false;
-  headerLogo = './assets/images/logos/cardano.svg';
+  headerLogo = './assets/images/logos/log2.svg';
 
   menuList = [
     {
       id: 1,
-      code: 'MAN',
-      text: 'Gestión Personal',
+      code: 'GES',
+      text: 'REPORTES',
       order: 1,
-      icon: 'people',
+      icon: 'query_stats',
       type: 'PAREN',
-      link: 'gestion',
+      link: 'evento',
       enable: false,
       module: 'Reporte',
       displayed: false,
       submenus: [
         {
           code: 'MAN-001',
-          text: 'Personal',
+          text: 'Reporte Evento',
           order: 0,
-          icon: 'how_to_reg',
+          icon: 'bar_chart',
           type: 'ALONE',
-          link: 'gestion/personas',
-          enable: false,
-          module: 'MAN',
-          displayed: false,
-        },
-        {
-          code: 'MAN-002',
-          text: 'Recurso Hardware',
-          order: 20,
-          icon: 'phonelink',
-          type: 'PAREN',
-          link: 'gestion/hardware',
-          enable: false,
-          module: 'MAN',
-          displayed: false,
-        },
-        {
-          code: 'MAN-002',
-          text: 'Recurso Cuenta',
-          order: 20,
-          icon: 'lock_clock',
-          type: 'PAREN',
-          link: 'gestion/cuentas',
+          link: 'evento/reporte',
           enable: false,
           module: 'MAN',
           displayed: false,
         },
       ],
     },
-
     {
       id: 2,
-      code: 'HER',
-      text: 'Mantenimiento',
+      code: 'EVE',
+      text: 'EVENTO',
       order: 1,
-      icon: 'settings_suggest',
+      icon: 'timer',
       type: 'PAREN',
-      link: 'mantenimiento',
+      link: 'evento',
       enable: false,
-      module: 'administrador',
+      module: 'evento',
       displayed: false,
       submenus: [
         {
           code: 'PAS-001',
-          text: 'Entidad',
+          text: 'Lista Eventos',
           order: 3,
-          icon: 'dashboard_customize',
+          icon: 'pending_actions',
           type: 'PAREN',
-          link: 'mantenimiento/entidad',
-          enable: false,
-          module: 'PAS',
-          displayed: false,
-        },
-      ],
-    },
-
-    {
-      id: 3,
-      code: 'HER',
-      text: 'Factorización',
-      order: 1,
-      icon: 'currency_exchange',
-      type: 'PAREN',
-      link: 'factorizacion',
-      enable: false,
-      module: 'administrador',
-      displayed: false,
-      submenus: [
-        {
-          code: 'PAS-001',
-          text: 'Venta declarada',
-          order: 3,
-          icon: 'paid',
-          type: 'PAREN',
-          link: 'factorizacion/ventas',
+          link: 'evento/lista',
           enable: false,
           module: 'PAS',
           displayed: false,
@@ -116,6 +67,7 @@ export class MenuMobileComponent implements OnInit {
       ],
     },
   ];
+
   constructor(private menuService: MenuService, private router: Router) {}
 
   ngOnInit(): void {

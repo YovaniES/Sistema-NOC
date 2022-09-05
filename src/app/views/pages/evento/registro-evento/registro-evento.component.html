@@ -6,26 +6,26 @@
       <div class="card" style="border-radius: 2px; font-weight: 600; padding: 7px">
           <form class="row g-3" [formGroup]="filtroForm">
             <div class="col-sm-3 cli-form-element">
-              <label class="form-label">Código ticket</label>
+              <label>Código ticket</label>
               <input
                 type="text"
-                class="form-control"
-                formControlName="nombres"/>
+                class="form-control cli-input-white"
+                formControlName="cod_ticket"/>
             </div>
 
             <div class="col-sm-3 cli-form-element">
-              <label class="form-label">Usuario</label>
+              <label>Usuario</label>
               <input
                 type="text"
-                class="form-control"
-                formControlName="apellidos"/>
+                class="form-control cli-input-white"
+                formControlName="usuario"/>
             </div>
 
             <div class="col-sm-3 cli-form-element">
-              <label class="form-label">Área responsable</label>
-              <select class="form-select" formControlName="codProy">
+              <label>Área responsable</label>
+              <select class="cli-input-white" formControlName="area_responsable">
                 <option [value]="0" disabled>- Seleccione -</option>
-                <option [value]="cod.id" *ngFor="let cod of listCodProy">{{cod.codigo}}</option>
+                <option [value]="area.id_correlativo" *ngFor="let area of listAreaResponsable">{{area.valor_texto_1}}</option>
               </select>
             </div>
 
@@ -34,8 +34,8 @@
                 <label>Fecha registro <span class="date-rango">(desde)</span></label>
                  <input
                   type="date"
-                  class="form-control"
-                  formControlName="fechaIngresoInicio"/>
+                  class="form-control cli-input-white"
+                  formControlName="fecha_registro_inicio"/>
               </div>
             </div>
 
@@ -44,8 +44,8 @@
                 <label>Fecha registro <span class="date-rango">(hasta)</span></label>
                 <input
                   type="date"
-                  class="form-control"
-                  formControlName="fechaIngresoFin"/>
+                  class="form-control cli-input-white"
+                  formControlName="fecha_registro_fin"/>
               </div>
             </div>
 
@@ -63,7 +63,7 @@
                 type="button"
                 class="cli-btn btn-blue-light"
                 style="border-radius: 2px; padding: 0.225rem 0.75rem"
-                (click)="cargarOBuscarPersonal()"
+                (click)="cargarOBuscarEvento()"
                 ><mat-icon class="icon-18">search</mat-icon>
                 Buscar
               </button>
@@ -78,7 +78,7 @@
             class="cli-btn btn-blue"
             style="margin: 0"
             type="button"
-            (click)="crearPersonal()"
+            (click)="crearEvento()"
             ><mat-icon class="icon-18">add</mat-icon>Agregar evento
           </button>
 
@@ -91,7 +91,7 @@
 
         <div class="flex-1"></div>
         <div class="mt-2" style="color: #345df3; font-weight: 600;">
-          Total : <span class="total">{{ listaPersonal.length }} Personas</span>
+          Total : <span class="total">{{ listaEventos.length }} Eventos</span>
         </div>
       </div>
 
@@ -103,6 +103,7 @@
               <th>Acción</th>
               <th>Cód. Evento</th>
               <th>Cód. Ticket</th>
+              <th>Tipo Evento</th>
               <th>Estado Evento</th>
               <th>H. Inicio</th>
               <th>H. Fin</th>
@@ -115,13 +116,19 @@
           </thead>
 
           <tbody>
-            <tr *ngFor="let evento of listaPersonal | paginate:
+            <tr *ngFor="let evento of listaEventos | paginate:
                       { itemsPerPage: pageSize,
                         currentPage : page,
                         totalItems  : totalPersonal
                       } ">
               <td class="w100">
                 <div class="cli-table-actions">
+                  <button matTooltip ="Ver Detalle"
+                    class="icon-btn btn-trans c-grey"
+                    (click)="abrirDetalleEvento(evento.idreg)"
+                    ><mat-icon class="icon-18">visibility</mat-icon>
+                  </button>
+
                   <button matTooltip="Actualizar"
                     class="icon-btn btn-trans c-blue"
                     (click)="actualizarPersonal(evento)"
@@ -134,49 +141,19 @@
                     ><mat-icon class="icon-18">delete</mat-icon>
                   </button>
 
-                  <button matTooltip ="{{ tooltipActivoInactivo }}"
-                    class="icon-btn btn-trans c-grey"
-                    (click)="abrirEliminar(evento.id, evento.codigo_corporativo, evento.estado, evento.nombres)"
-                    ><mat-icon class="icon-18">visibility</mat-icon>
-                  </button>
                 </div>
               </td>
-              <td class="w350"> {{ evento.apellidos |firstCapital}}, {{evento.nombres | firstCapital}}</td>
-              <td >{{ evento.correo }}</td>
-              <td>{{ evento.perfil | firstCapital }}</td>
-              <td>{{ evento.codigo_corporativo| uppercase }}</td>
-              <td>{{ evento.codigo_proyecto | uppercase}}</td>
-              <td class="w100">
-                <div class="cli-table-actions">
-                  <ng-container *ngIf="evento.total_rh >= 1" >
-                    <small class="c-indigo" style="display:flex; flex-direction:inherit">{{evento.total_rh}}</small>
-                    <button
-                      class="icon-btn c-indigo"
-                      style="background: none; cursor: none;"
-                      ><mat-icon class="icon-13">devices</mat-icon>
-                    </button>
-                  </ng-container>
-
-                  <div *ngIf="evento.total_rh != 0 && evento.total_rc != 0" class="h-divider"></div>
-
-                  <ng-container *ngIf="evento.total_rc >= 1">
-                    <small   class="c-cyan">{{evento.total_rc}}</small>
-                    <button
-                      class="icon-btn  c-cyan"
-                      style="background: none; cursor: none;"
-                      ><mat-icon class="icon-13">vpn_lock</mat-icon>
-                    </button>
-                  </ng-container>
-                </div>
-              </td>
-
-              <td>{{ evento.dni }}</td>
-              <td>
-                <span *ngIf="evento.estado == 'Activo'"   class="w135 label estado-info">  {{ evento.estado | uppercase }}</span>
-                <span *ngIf="evento.estado == 'Inactivo'" class="w135 label estado-danger">{{ evento.estado | uppercase }}</span>
-              </td>
-              <td class="w100">{{ evento.fecha_ingreso }}</td>
-              <td class="w100">{{ evento.fecha_ingreso }}</td>
+              <td class="w350"> {{ evento.cod_evento }}</td>
+              <td >{{ evento.codigo_ticket_generado }}</td>
+              <td>{{ evento.tipo_evento | firstCapital }}</td>
+              <td>{{ evento.estado | uppercase }}</td>
+              <td>{{ evento.hora_inicio | uppercase}}</td>
+              <td>{{ evento.hora_fin | uppercase}}</td>
+              <td>{{ evento.estado_ticket }}</td>
+              <td class="w100">{{ evento.area_responsable }}</td>
+              <td class="w100">{{ evento.modonotificacion }}</td>
+              <td class="w100">{{ evento.usuario_registro }}</td>
+              <td class="w100">{{ evento.fecha_creacion  }}</td>
             </tr>
           </tbody>
         </table>
@@ -186,7 +163,7 @@
         </div>
 
         <div
-          *ngIf="!loadingItem && listaPersonal.length == 0"
+          *ngIf="!loadingItem && listaEventos.length == 0"
           class="cli-loader mt-5"
           style="color: #f83434"
           >No hay Eventos para mostrar

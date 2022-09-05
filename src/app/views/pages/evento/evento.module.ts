@@ -9,13 +9,15 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { CoreModule } from 'src/app/core/core.module';
 import { MaterialModule } from 'src/app/material/material.module';
 import { ReporteEventoComponent } from './registro-evento/reporte-evento/reporte-evento.component';
+import { ModalDetalleComponent } from './registro-evento/modal-detalle/modal-detalle.component';
 
 
 @NgModule({
   declarations: [
     RegistroEventoComponent,
     ModalEventoComponent,
-    ReporteEventoComponent
+    ReporteEventoComponent,
+    ModalDetalleComponent
   ],
   imports: [
     CommonModule,

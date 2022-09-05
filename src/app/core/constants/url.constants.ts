@@ -23,4 +23,4 @@ export const API_AUTH_SESSION = MAIN_PATH_AUTH + '/login';
 export const API_ROLE = MAIN_PATH_AUTH + '/userRol';
 
 // REGISTRO
-export const API_PERSONAS = MAIN_PATH_NET + 'ExecuteQuery';
+export const API_EVENTO = MAIN_PATH_NET + 'ExecuteQuery';
