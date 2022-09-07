@@ -1,6 +1,6 @@
 <div style="display: flex">
   <div class="flex-1"></div>
-  <div class="modal-title c-male"> {{DATA_EVENTO ? 'Actualizar' : 'Crear'}} evento </div>
+  <div class="modal-title c-male"> {{DATA_EVENTO ? 'Actualizar' : 'Agregar'}} evento </div>
     <div class="flex-1"></div>
 
     <button (click)="close()" class="icon-btn btn-trans c-orange moda-close-btn">
@@ -29,11 +29,11 @@
 
             <div class="col-sm-3 cli-form-element">
               <label>Tipo de evento *</label>
-              <select class="cli-input-white" formControlName="tipo">
+              <select class="cli-input-white" formControlName="tipo_evento">
                 <option [value]="0" disabled>- Seleccione -</option>
                 <option [value]="tipo.id_correlativo" *ngFor="let tipo of listTipoIncidencia">{{ tipo.valor_texto_1 }}</option>
               </select>
-              <small class="text-alert" *ngIf="campoNoValido('tipo')">* Ingrese el Tipo es obligatorio</small>
+              <small class="text-alert" *ngIf="campoNoValido('tipo_evento')">* Ingrese el Tipo es obligatorio</small>
             </div>
 
             <div class="col-sm-3 cli-form-element">
@@ -73,14 +73,12 @@
             </div>
 
             <div class="col-sm-3 cli-form-element">
-              <div class="form-group">
-                <label>Plataforma/Aplicación *</label>
-                <input
-                  type="text"
-                  class="form-control cli-input-white"
-                  formControlName="plataforma"/>
-                  <small class="text-alert" *ngIf="campoNoValido('plataforma')">* Ingrese el Plataforma es obligatorio</small>
-              </div>
+              <label>Plataforma/Aplicación *</label>
+              <select class="cli-input-white" formControlName="aplicacion">
+                <option [value]="0" disabled>- Seleccione -</option>
+                <option [value]="aplicacion.id_correlativo" *ngFor="let aplicacion of listAplicaciones">{{ aplicacion.valor_texto_1 }}</option>
+              </select>
+              <small class="text-alert" *ngIf="campoNoValido('aplicacion')">* Ingrese la Aplicación es obligatorio</small>
             </div>
 
             <div class="col-sm-3 cli-form-element">
@@ -137,8 +135,8 @@
               <input
                 type="text"
                 class="form-control cli-input-white"
-                formControlName="destinado_a"/>
-                <small class="text-alert" *ngIf="campoNoValido('destinado_a')">* Ingrese el Destinatario es obligatorio</small>
+                formControlName="destinatario"/>
+                <small class="text-alert" *ngIf="campoNoValido('destinatario')">* Ingrese el Destinatario es obligatorio</small>
             </div>
 
             <div class="col-sm-3 cli-form-element">

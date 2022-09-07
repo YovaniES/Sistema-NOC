@@ -1,12 +1,12 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-aside',
   templateUrl: './aside.component.html',
 })
-export class AsideComponent implements OnInit {
+export class AsideComponent {
   @Output() generalfixedAside = new EventEmitter<Boolean>();
-  fixedAside = true; //OBS: Verificar
+  fixedAside = true;
   menuList = [
     {
       id: 1,
@@ -60,12 +60,6 @@ export class AsideComponent implements OnInit {
     },
   ];
 
-
-  constructor() {}
-
-  ngOnInit(): void { }
-
-
   clickLinkMenu() {
     this.menuList.forEach((item) => {
       item.displayed = false;
@@ -88,3 +82,4 @@ export class AsideComponent implements OnInit {
     this.generalfixedAside.emit(this.fixedAside);
   }
 }
+

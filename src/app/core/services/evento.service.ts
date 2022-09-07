@@ -29,6 +29,10 @@ export class EventoService {
     return this.http.post(API_EVENTO, obj);
   }
 
+  getlistAplicaciones(obj: any){
+    return this.http.post(API_EVENTO, obj);
+  }
+
   getListPrioridades(obj: any){
     return this.http.post(API_EVENTO, obj);
   }

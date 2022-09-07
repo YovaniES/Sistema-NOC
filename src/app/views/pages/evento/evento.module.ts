@@ -5,7 +5,7 @@ import { EventoRoutingModule } from './evento-routing.module';
 import { RegistroEventoComponent } from './registro-evento/registro-evento.component';
 import { ModalEventoComponent } from './registro-evento/modal-evento/modal-evento.component';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgxSpinnerModule } from "ngx-spinner";
 import { CoreModule } from 'src/app/core/core.module';
 import { MaterialModule } from 'src/app/material/material.module';
 import { ReporteEventoComponent } from './registro-evento/reporte-evento/reporte-evento.component';
