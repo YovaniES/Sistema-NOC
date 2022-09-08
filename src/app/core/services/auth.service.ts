@@ -3,8 +3,7 @@ import { EventEmitter, Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import jwt_decode from 'jwt-decode';
 import { Router } from '@angular/router';
-import { Usuario } from '../interfaces/auth.interface';
-import { API_AUTH_SESSION } from '../constants/url.constants';
+import { API_AUTH_SESSION_AUDITORIA } from '../constants/url.constants';
 import { of } from 'rxjs';
 import { ROL_GESTOR, ROL_USUARIO } from '../constants/rol.constants';
 
@@ -16,8 +15,8 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  login(loginData: Usuario) {
-    return this.http.post<any>(API_AUTH_SESSION, loginData).pipe(
+  login_auditoria(loginData: any) {
+    return this.http.post<any>(API_AUTH_SESSION_AUDITORIA, loginData).pipe(
       tap((resp: any) => {
         localStorage.setItem('token', resp.user.token);
         localStorage.setItem('currentUser', JSON.stringify(resp));
@@ -36,7 +35,7 @@ export class AuthService {
     if (!usuarioLogeado || usuarioLogeado.ROL_ID != ROL_USUARIO.rolID ) {
       return null
     } else {
-      return usuarioLogeado.name
+      return usuarioLogeado.unique_name
     }
   }
 
@@ -64,13 +63,14 @@ export class AuthService {
 
   getUsername() {
     const decodedToken: any = this.decodeToken();
-    // console.log('ROL', decodedToken);
-    return decodedToken ? decodedToken.name : '';
+    // console.log('UNIQUE_NAME', decodedToken);
+    return decodedToken ? decodedToken.unique_name : '';
   }
 
+  // unique_name:"jysantiago"
   getCurrentUser() {
     const currentUser: any = localStorage.getItem('currentUser');
-    // console.log('USER-ACTUAL',JSON.parse(currentUser));
+    // console.log('USER_NAME',JSON.parse(currentUser));
     return of(currentUser ? JSON.parse(currentUser) : '');
   }
 

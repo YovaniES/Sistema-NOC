@@ -158,13 +158,15 @@
       </div>
 
       <!-- INCIDENCIAS ------------------------------------------------------------------------->
+      <!-- <div *ngIf="DATA_EVENTO && DATA_EVENTO.evForm.controls['Incidencia'].value">
+
+      </div> -->
+
       <div *ngIf="DATA_EVENTO && DATA_EVENTO.tipo_evento =='Incidencia'">
         <div class="pr-subtitle mt-1">Incidencias</div>
         <div class="pr-section mb-3">
           <div class="pr-module-container">
             <div class="row">
-
-
             <div class="col-sm-3 cli-form-element">
               <label>Ticket generado</label>
               <input
@@ -183,14 +185,12 @@
             </div>
 
             <div class="col-sm-3 cli-form-element">
-              <div class="form-group">
-                <label>Estado de Ticket</label>
-                <input
-                  type="text"
-                  readonly="true"
-                  class="form-control cli-input-white"
-                  formControlName="estado_ticket"/>
-              </div>
+              <label>Estado de Ticket *</label>
+              <select class="cli-input-white" formControlName="estado_ticket">
+                <option [value]="0" disabled>- Seleccione -</option>
+                <option [value]="est.id_correlativo" *ngFor="let est of listEstTicket">{{ est.valor_texto_1 }}</option>
+              </select>
+              <small class="text-alert" *ngIf="campoNoValido('estado_ticket')">* Ingrese el Estado es obligatorio</small>
             </div>
 
             <div class="col-sm-3 cli-form-element">
@@ -233,8 +233,8 @@
             </div>
             </div>
           </div>
+        </div>
       </div>
-    </div>
 
 
       <!-- MOTIVOS Y COMENTARIOS ------------------------------------------------------------------------->

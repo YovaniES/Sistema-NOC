@@ -6,8 +6,17 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { EventoService } from 'src/app/core/services/evento.service';
 import Swal from 'sweetalert2';
-// import { Moment } from 'moment';
 import * as moment from 'moment';
+
+export class Usuario {
+  id!: number;
+  username!: string;
+  password!: string;
+  firstName!: string;
+  lastName!: string;
+  token!: string;
+  user:any;
+}
 
 @Component({
   selector: 'app-modal-evento',
@@ -15,7 +24,8 @@ import * as moment from 'moment';
   styleUrls: ['./modal-evento.component.scss']
 })
 export class ModalEventoComponent implements OnInit {
-
+  usuario: any;
+  // usuario:Usuario;
   loadingItem: boolean = false;
   userID: number = 0;
   eventoForm!: FormGroup;
@@ -28,7 +38,9 @@ export class ModalEventoComponent implements OnInit {
     public datePipe: DatePipe,
     private dialogRef: MatDialogRef<ModalEventoComponent>,
     @Inject(MAT_DIALOG_DATA) public DATA_EVENTO: any
-  ) { }
+  ) {
+    // this.usuario = JSON.parse(localStorage.getItem('currentUser')
+  }
 
   ngOnInit(): void {
     this.newForm();
@@ -43,11 +55,15 @@ export class ModalEventoComponent implements OnInit {
     this.getUsuario();
     this.getlistAplicaciones();
     this.getListAreaResponsable();
+    this.getListEstTicket()
     this.ListaHistoricoCambios(this.DATA_EVENTO);
 
     console.log('DATA_EVENTO', this.DATA_EVENTO);
     console.log('DATA_EVEN_ESTADO_TICKET', this.DATA_EVENTO.tipo_evento);
-  }
+    console.log('DATA_EVEN_COD_EVENTO', this.DATA_EVENTO.cod_evento);
+    console.log('FECHA_INCIO', moment(new Date()).format('YYYY-MM-DD HH:mm:ss'));
+    console.log('HORA_X', formatDate(new Date(), 'hh:mm', 'en-US', ''));
+    }
 
   newForm(){
     this.eventoForm = this.fb.group({
@@ -57,24 +73,26 @@ export class ModalEventoComponent implements OnInit {
      descripcion      : ['', [Validators.required]],
      estado           : ['', [Validators.required]],
      motivo           : ['', [Validators.required]],
-     aplicacion       : ['', [Validators.required]],
-     servicios        : ['', [Validators.required]],
-     h_deteccion      : ['', [Validators.required]],
-     h_inicio         : ['', [Validators.required]],
+     aplicacion       : ['', ],
+     servicios        : ['', ],
+     h_deteccion      : ['', ],
+     h_inicio         : ['', ],
      fecha_inicio     : ['', [Validators.required]],
-     modo_notificacion: ['', [Validators.required]],
-     h_notificacion   : ['', [Validators.required]],
+     modo_notificacion: [ 3, [Validators.required]],
+     h_notificacion   : ['', ],
      destinatario     : ['Soporte y Monitoreo RPA', [Validators.required]],
      fecha_fin        : ['', ],
      h_fin            : ['', ],
-     ticket_generado  : ['', [Validators.required]],
-     h_generacion     : ['', [Validators.required]],
-     estado_ticket    : ['', [Validators.required]],
-     area_responsable : ['', [Validators.required]],
+    /* -----Incidencias------------ */
+     ticket_generado  : [''],
+     h_generacion     : [''],
+     estado_ticket    : [''],
+     area_responsable : [''],
      fecha_resolucion : [''],
-     h_solucion       : ['', [Validators.required]],
+     h_solucion       : [''],
      pbi              : [''],
      eta_pbi          : [''],
+    /* -----motivos-comentarios----- */
      motivo_notas     : [''],
      comentarios      : [''],
     })
@@ -100,31 +118,41 @@ export class ModalEventoComponent implements OnInit {
         queryId: 23,
         mapValue: {
           p_id_tipoEvento         : formValues.tipo_evento,
-          p_cdescripcion          : formValues.descripcion ? formValues.descripcion.split("'").join('') : '',
+          p_cdescripcion          : formValues.descripcion,
           p_estado                : formValues.estado,
           p_motivo                : formValues.motivo,
           p_aplicacion            : formValues.aplicacion,
-          p_hora_deteccion        : formatDate(new Date(), 'hh:mm', 'en-US', ''),
-          p_hora_inicio           : formatDate(new Date(), 'hh:mm', 'en-US', ''),
-          p_hora_fin              : formatDate(new Date(), 'hh:mm', 'en-US', ''),
+          p_hora_deteccion        : formValues.h_deteccion,
+          p_fecha_inicio          : formValues.fecha_inicio,
+          p_hora_inicio           : formValues.h_inicio,
+          // p_hora_fin              : formatDate(new Date(), 'hh:mm', 'en-US', ''),
+          // p_hora_deteccion        : formatDate(new Date(), 'hh:mm', 'en-US', ''),
+          // p_fecha_inicio          : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+          // p_hora_inicio           : formatDate(new Date(), 'hh:mm', 'en-US', ''),
+          // p_hora_fin              : formatDate(new Date(), 'hh:mm', 'en-US', ''),
           // "p_fecha_fin"                 : <HTMLInputElement>document.getElementById('ffin') ? (<HTMLInputElement>document.getElementById('ffin')).value :'',
           p_fecha_fin             : '',
-          p_hora_notificacion     : formatDate(new Date(), 'hh:mm', 'en-US', ''),
+          p_hora_notificacion     : formValues.h_notificacion,
+          // p_hora_notificacion     : formatDate(new Date(), 'hh:mm', 'en-US', ''),
           p_modo                  : formValues.modo_notificacion,
-          p_destinatario          : formValues.destinatario ? formValues.destinatario.split("'").join('') : '',
-          p_cantidad              : formValues.servicios ? formValues.servicios.split("'").join('') : '',
-          p_codigo_ticket_generado: formValues.ticket_generado ? formValues.ticket_generado.split("'").join('') : '',
-          p_hora_generacion       : formatDate(new Date(), 'hh:mm', 'en-US', ''),
+          p_destinatario          : formValues.destinatario,
+          p_cantidad              : formValues.servicios,
+          p_codigo_ticket_generado: formValues.ticket_generado,
+          p_hora_generacion       : formValues.h_generacion,
+          // p_hora_generacion       : formatDate(new Date(), 'hh:mm', 'en-US', ''),
           p_estic                 : formValues.estado_ticket,
           p_prioridad             : formValues.prioridad,
           p_area                  : formValues.area_responsable,
-          p_hora_resolucion       : formatDate(new Date(), 'hh:mm', 'en-US', ''),
-          p_pbi                   : formValues.pbi ? formValues.pbi.split("'").join('') : '',
-          p_eta_pbi               : formValues.eta_pbi ? formValues.eta_pbi.split("'").join('') : '',
-          p_comentariosgenerales  : formValues.comentarios ? formValues.comentarios.split("'").join('') : '',
-          p_notas                 : formValues.motivo_notas ? formValues.motivo_notas.split("'").join('') : '',
-          p_fecha_creacion        : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+          p_fecha_resolucion      : formValues.fecha_resolucion,
+          p_hora_resolucion       : formValues.h_solucion,
+          // p_hora_resolucion       : formatDate(new Date(), 'hh:mm', 'en-US', ''),
+          p_pbi                   : formValues.pbi,
+          p_eta_pbi               : formValues.eta_pbi,
+          p_comentariosgenerales  : formValues.comentarios,
+          p_medidas_correctivas   : '',
+          p_notas                 : formValues.motivo_notas,
           p_user_creacion         : this.userID,
+          p_fecha_creacion        : moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
         },
       };
 
@@ -132,7 +160,7 @@ export class ModalEventoComponent implements OnInit {
     this.eventoService.crearEvento(parametro).subscribe((resp: any) => {
       Swal.fire({
         title: 'Crear Evento!',
-        text: `Evento: ${formValues.modelo}, creado con éxito`,
+        text: `Evento: ${formValues.tipo_evento}, creado con éxito`,
         icon: 'success',
         confirmButtonText: 'Ok',
       });
@@ -144,20 +172,42 @@ export class ModalEventoComponent implements OnInit {
     this.spinner.show();
 
     const formValues = this.eventoForm.getRawValue();
+
     let parametro: any[] = [{
-        queryId: 111111111111111117,
+        queryId: 27,
         mapValue: {
-          param_id_recurso    : this.DATA_EVENTO.id_recurso,
-          param_id_tipo_evento: this.eventoForm.value.tipo_evento,
-          param_id_marca      : this.eventoForm.value.marca,
-          param_descripcion   : this.eventoForm.value.equipo,
-          param_modelo        : this.eventoForm.value.modelo,
-          param_serie         : this.eventoForm.value.serie,
-          param_imei          : this.eventoForm.value.imei,
-          param_observacion   : this.eventoForm.value.observacion,
-          CONFIG_USER_ID      : this.userID,
-          CONFIG_OUT_MSG_ERROR: "",
-          CONFIG_OUT_MSG_EXITO: "",
+          p_id_registro            : this.DATA_EVENTO.idreg ,
+          p_id_tipoEvento          : formValues.tipo_evento ,
+          p_cdescripcion           : formValues.descripcion ,
+          p_estado                 : formValues.estado ,
+          p_motivo                 : formValues.motivo ,
+          p_aplicacion             : formValues.aplicacion ,
+          p_hora_deteccion         : formValues.h_deteccion ,
+          p_fecha_inicio           : formValues.fecha_inicio ,
+          p_hora_inicio            : formValues.h_inicio ,
+          p_hora_fin               : formValues.h_fin ,
+          p_fecha_fin              : formValues.fecha_fin ,
+          p_hora_notificacion      : formValues.h_notificacion ,
+          p_modo                   : formValues.modo_notificacion ,
+          p_destinatario           : formValues.destinatario ,
+          p_cantidad               : formValues.servicios ,
+          p_codigo_ticket_generado : formValues.ticket_generado ,
+          p_hora_generacion        : formValues.h_generacion ,
+          p_estic                  : formValues.estado_ticket ,
+          p_prioridad              : formValues.prioridad ,
+          p_area                   : formValues.area_responsable ,
+          p_fecha_resolucion       : formValues.fecha_resolucion ,
+          p_hora_resolucion        : formValues.h_solucion ,
+          p_pbi                    : formValues.pbi ,
+          p_eta_pbi                : formValues.eta_pbi ,
+          p_comentariosgenerales   : formValues.comentarios ,
+          p_medidas_correctivas    : '' ,
+          p_notas                  : formValues.motivo_notas ,
+          p_fecha_actualizacion    : '' ,
+          p_user_actualizacion     : this.userID ,
+          CONFIG_USER_ID           : this.userID ,
+          CONFIG_OUT_MSG_ERROR : '' ,
+          CONFIG_OUT_MSG_EXITO : ''
         },
       }];
 
@@ -170,7 +220,7 @@ export class ModalEventoComponent implements OnInit {
 
       Swal.fire({
         title: 'Actualizar evento!',
-        text : `Evento:  ${formValues.modelo }, actualizado con éxito`,
+        text : `Evento:  ${this.DATA_EVENTO.cod_evento }, actualizado con éxito`,
         icon : 'success',
         confirmButtonText: 'Ok'
         })
@@ -203,7 +253,7 @@ export class ModalEventoComponent implements OnInit {
       this.eventoForm.controls['h_fin'            ].setValue(this.DATA_EVENTO.hora_fin);
       this.eventoForm.controls['ticket_generado'  ].setValue(this.DATA_EVENTO.codigo_ticket_generado);
       this.eventoForm.controls['h_generacion'     ].setValue(this.DATA_EVENTO.hora_generacion);
-      this.eventoForm.controls['estado_ticket'    ].setValue(this.DATA_EVENTO.estado_ticket);
+      this.eventoForm.controls['estado_ticket'    ].setValue(this.DATA_EVENTO.id_estado_ticket);
       this.eventoForm.controls['area_responsable' ].setValue(this.DATA_EVENTO.id_area_responsable);
       this.eventoForm.controls['fecha_resolucion' ].setValue(this.DATA_EVENTO.fecha_resolucion);
       this.eventoForm.controls['h_solucion'       ].setValue(this.DATA_EVENTO.hora_resolucion);
@@ -232,12 +282,6 @@ export class ModalEventoComponent implements OnInit {
     }
   }
 
-  // validarIfIsGestor(){
-  //   if (!this.authService.esUsuarioGestor()) {
-  //     this.iniciativaEditForm.controls['estado'].disable()
-  //     this.iniciativaEditForm.controls['responsable'].disable()
-  //   }
-  // }
 
   campoNoValido(campo: string): boolean {
     if ( this.eventoForm.get(campo)?.invalid && this.eventoForm.get(campo)?.touched ) {
@@ -247,15 +291,6 @@ export class ModalEventoComponent implements OnInit {
     }
   }
 
-  // valueChanges(){
-  //   this.eventoForm.get('modelo')?.valueChanges.subscribe((valor: string) => {
-  //     this.eventoForm.patchValue( {modelo: valor.toUpperCase()}, {emitEvent: false});
-  //   });
-
-  //   this.eventoForm.get('serie')?.valueChanges.subscribe((valor: string) => {
-  //     this.eventoForm.patchValue( {serie: valor.toUpperCase()}, {emitEvent: false});
-  //   })
-  // }
 
   listHistoricoCambios: any[] = [];
   ListaHistoricoCambios(idRegistro:number){
@@ -269,7 +304,7 @@ export class ModalEventoComponent implements OnInit {
     }];
     this.eventoService.ListaHistoricoCambios(parametro[0]).subscribe((resp: any) => {
       this.listHistoricoCambios = resp.list;
-     console.log("listHistorico", resp.list);
+    //  console.log("listHistorico", resp.list);
       this.spinner.hide();
     });
   }
@@ -277,7 +312,7 @@ export class ModalEventoComponent implements OnInit {
   getUsuario(){
     this.authService.getCurrentUser().subscribe( resp => {
       this.userID   = resp.user.userId;
-      console.log('ID-USER', this.userID);
+      // console.log('ID-USER', this.userID);
     })
    }
 
@@ -287,7 +322,7 @@ export class ModalEventoComponent implements OnInit {
 
      this.eventoService.getlistTipoIncidencia(parametro[0]).subscribe((resp: any) => {
        this.listTipoIncidencia = resp.list;
-       console.log('TIPO_INCIDENCIA', resp.list);
+      //  console.log('TIPO_INCIDENCIA', resp.list);
      });
    }
 
@@ -297,7 +332,7 @@ export class ModalEventoComponent implements OnInit {
 
     this.eventoService.getlistAplicaciones(parametro[0]).subscribe((resp: any) => {
       this.listAplicaciones = resp.list;
-      console.log('APLICACIONES', resp.list);
+      // console.log('APLICACIONES', resp.list);
     });
   }
 
@@ -306,7 +341,7 @@ export class ModalEventoComponent implements OnInit {
      let parametro: any[] = [{queryId: 42}];
      this.eventoService.getlistDescripcion(parametro[0]).subscribe((resp: any) => {
        this.listDescripcion = resp.list;
-       console.log('TIPO_INCIDENCIA', resp.list);
+      //  console.log('DESCRIPCION', resp.list);
      });
    }
 
@@ -315,7 +350,7 @@ export class ModalEventoComponent implements OnInit {
      let parametro: any[] = [{queryId: 40}];
      this.eventoService.getlistMotivosEvento(parametro[0]).subscribe((resp: any) => {
        this.listMotivos = resp.list;
-       console.log('MOTIVOS', resp.list);
+      //  console.log('MOTIVOS', resp.list);
      });
    }
 
@@ -324,7 +359,7 @@ export class ModalEventoComponent implements OnInit {
      let parametro: any[] = [{ queryId: 37 }];
      this.eventoService.getListPrioridades(parametro[0]).subscribe((resp: any) => {
        this.listPrioridades = resp.list;
-       console.log('PRIORIDADES', resp.list);
+      //  console.log('PRIORIDADES', resp.list);
      });
    }
 
@@ -344,8 +379,7 @@ export class ModalEventoComponent implements OnInit {
 
     this.eventoService.getListNotificaciones(parametro[0]).subscribe((resp: any) => {
       this.listNotificaciones = resp.list;
-      console.log('NOTIFICACIONES', resp.list);
-
+      // console.log('NOTIFICACIONES', resp.list);
     });
   }
 
@@ -355,7 +389,17 @@ export class ModalEventoComponent implements OnInit {
 
     this.eventoService.getListAreaResponsable(parametro[0]).subscribe((resp: any) => {
         this.listAreaResponsable = resp.list;
-        console.log('AREA_RESP', resp);
+        // console.log('AREA_RESP', resp);
+      });
+  }
+
+  listEstTicket: any[] = [];
+  getListEstTicket() {
+    let parametro: any[] = [{ queryId: 45 }];
+
+    this.eventoService.getListEstTicket(parametro[0]).subscribe((resp: any) => {
+        this.listEstTicket = resp.list;
+        // console.log('ESTADO_TICKET', resp);
       });
   }
 
@@ -364,3 +408,22 @@ export class ModalEventoComponent implements OnInit {
   }
 
 }
+
+
+  // validarIfIsGestor(){
+  //   if (!this.authService.esUsuarioGestor()) {
+  //     this.iniciativaEditForm.controls['estado'].disable()
+  //     this.iniciativaEditForm.controls['responsable'].disable()
+  //   }
+  // }
+
+
+  // valueChanges(){
+  //   this.eventoForm.get('modelo')?.valueChanges.subscribe((valor: string) => {
+  //     this.eventoForm.patchValue( {modelo: valor.toUpperCase()}, {emitEvent: false});
+  //   });
+
+  //   this.eventoForm.get('serie')?.valueChanges.subscribe((valor: string) => {
+  //     this.eventoForm.patchValue( {serie: valor.toUpperCase()}, {emitEvent: false});
+  //   })
+  // }

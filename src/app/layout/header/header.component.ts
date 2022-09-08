@@ -14,13 +14,6 @@ export class HeaderComponent implements OnInit {
   fixedAside: boolean = true;
   phtouri = "NONE";
 
-  loginForm: FormGroup = this.fb.group({
-    idaplicacion: ['1'],
-    username    : ['', [Validators.required]],
-    password    : ['', [Validators.required, Validators.minLength(6)]],
-  });
-
-
   constructor(
     private authService: AuthService,
     private menuService: MenuService,

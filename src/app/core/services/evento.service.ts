@@ -25,6 +25,10 @@ export class EventoService {
     return this.http.post(API_EVENTO, obj);
   }
 
+  getListEstTicket(obj: any){
+    return this.http.post(API_EVENTO, obj);
+  }
+
   getlistTipoIncidencia(obj: any){
     return this.http.post(API_EVENTO, obj);
   }

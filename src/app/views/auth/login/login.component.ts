@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { first } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
 import Swal from 'sweetalert2';
 
@@ -11,8 +12,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent  {
+
   loginForm: FormGroup = this.fb.group({
-    idaplicacion: ['1'],
     username    : ['', [Validators.required]],
     password    : ['', [Validators.required, Validators.minLength(6)]],
   });
@@ -24,24 +25,44 @@ export class LoginComponent  {
     private spinner: NgxSpinnerService
   ) {}
 
+  // login_auditoria() {
+  //   this.spinner.show();
+
+  //   this.authService.login_auditoria(this.loginForm.value).subscribe({next: (resp: any) => {
+  //       this.spinner.hide();
+  //       console.log('LOG', resp);
+
+
+  //       if (resp.user === true) {
+  //         Swal.fire(
+  //           "Inicio de Sesión",
+  //           "Bienvenid@ <br />" + `${resp.user.nombres} ${resp.user.apellidoPaterno}`,
+  //           "success"
+  //         );
+  //         this.router.navigateByUrl('home');
+  //       } else {
+  //       Swal.fire("Inicio de Sesión", "No se pudo iniciar Sesión", "error");
+  //       }
+  //     }});
+  // }
 
   login() {
-    this.spinner.show();
-    this.authService.login(this.loginForm.value).subscribe((resp) => {
-      // console.log('CREDENCIALES', resp.user);
+    this.authService.login_auditoria( this.loginForm.value ).pipe(first()).subscribe( resp => {
 
-      if (resp.user.aplicacion == 1 && resp.user.acceso == 1) {
+        if (resp) {
+          this.spinner.hide();
+
+          Swal.fire(
+            "Inicio de Sesión",
+            "Bienvenid@ <br />" + `${resp.user.nombres} ${resp.user.apellidoPaterno}`,
+            "success"
+          );
+          this.router.navigateByUrl('home');
+        }
+      }, error => {
         this.spinner.hide();
-        Swal.fire(
-          'Inicio de Sesión',
-          'Bienvenid@ <br />' + `${resp.user.nombres} ${resp.user.apellidoPaterno}`,
-          'success'
-        );
-        this.router.navigateByUrl('home');
-      } else {
-        Swal.fire('Inicio de Sesión', 'Credenciales incorrectas', 'error');
-      }
-    });
+        Swal.fire('Error', 'Credenciales Incorrectas', 'error' );
+      });
   }
 
   campoNoValido(campo: string): boolean {

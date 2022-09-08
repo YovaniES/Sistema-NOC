@@ -1,26 +1,27 @@
 const ENVIROMENT: string = 'DEV';
+// const ENVIROMENT: string = 'PROD';
 
 
-let MAIN_PATH_NET  = '';
-let MAIN_PATH_AUTH = '';
+let PATH_BACK_NET  = '';
+let PATH_AUDITORIA_AUTH = '';
 switch (ENVIROMENT) {
   case 'DEV':
-    MAIN_PATH_AUTH = 'http://seguridadweb.indratools.com/aut/seguridad';
-    MAIN_PATH_NET  = 'https://localhost:3061/api/configurador/';
-    // MAIN_PATH_NET  = 'https://localhost:3061/api/configurador/';
+    PATH_AUDITORIA_AUTH = 'http://auditoriaseguridadapi2.indratools.com/aut/seguridad/';
+    PATH_BACK_NET       = 'https://localhost:3061/api/configurador/';
     break;
   case 'QA':
-    MAIN_PATH_AUTH = '';
+    PATH_AUDITORIA_AUTH = '';
     break;
   case 'PROD':
-    //  MAIN_PATH_NET = 'http://backtools.indratools.com/api/configurador/';
+    // PATH_AUDITORIA_AUTH = 'http://auditoriaseguridadapi2.indratools.com/aut/seguridad/';
+    // PATH_BACK_NET       = 'http://auditoriabackapi.indratools.com/api/configurador/';
     break;
   default:
     break;
 }
 
-export const API_AUTH_SESSION = MAIN_PATH_AUTH + '/login';
-export const API_ROLE = MAIN_PATH_AUTH + '/userRol';
+// LOGIN
+export const API_AUTH_SESSION_AUDITORIA = PATH_AUDITORIA_AUTH + '/login';
 
-// REGISTRO
-export const API_EVENTO = MAIN_PATH_NET + 'ExecuteQuery';
+// REGISTRO EVENTO
+export const API_EVENTO = PATH_BACK_NET + 'ExecuteQuery';

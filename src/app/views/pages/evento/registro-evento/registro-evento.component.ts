@@ -20,8 +20,6 @@ export class RegistroEventoComponent implements OnInit {
   loadingItem: boolean = false;
   userId!: number;
   filtroForm!: FormGroup;
-  totalCuenta: number = 0;
-  totalHardware: number = 5;
 
   page = 1;
   totalPersonal: number = 0;
@@ -101,46 +99,6 @@ export class RegistroEventoComponent implements OnInit {
     );
   }
 
-  // activado_desactivado: string='';
-  // bajaOaltaAlEvento(id: number, fullname: string){
-  //   this.spinner.show();
-  //   let parametro:any[] = [{
-  //     "queryId": 9,
-  //     "mapValue": { param_id_persona : id }
-  //   }];
-
-  //   this.EventoService.bajaOaltaAlEvento(parametro[0]).subscribe(data => {
-  //     const arrayData:any[] = Array.of(data);
-  //     let msj  = arrayData[0].exitoMessage;
-  //     let msj2 = arrayData[0].errorMessage
-  //     if(msj == undefined){msj = ''}
-  //     if (msj != '') {
-
-  //       if (this.tooltipActivoInactivo == 'Desactivar') {this.activado_desactivado = 'Desactivado'}
-  //       if (this.tooltipActivoInactivo == 'Activar'   ) {this.activado_desactivado = 'Activado'}
-
-  //       Swal.fire({
-  //         title: `${this.tooltipActivoInactivo} al Personal`,
-  //         text: `El Personal: ${fullname}, fue ${this.activado_desactivado} con éxito`,
-  //         icon: 'success',
-  //       });
-
-  //     }else if (msj2 != ''){
-  //       Swal.fire({
-  //         title: `${this.tooltipActivoInactivo} al Personal`,
-  //         text: `El Personal: ${fullname} No pudo ser: ${this.activado_desactivado}, por que tiene recursos asignados`,
-  //         icon: 'error',
-  //       });
-
-  //     }else{
-  //       // this.showError('Error');
-  //     }
-  //     this.cargarOBuscarEvento();
-  //   });
-  //   this.spinner.hide();
-  // }
-
-
   abrirEliminarLogico(id:number, codCorporrativo:string, estado: string, nameevento: string){
     // this.idEliminar = id;
     this.codCorporativo = codCorporrativo;
@@ -202,7 +160,7 @@ export class RegistroEventoComponent implements OnInit {
 
     this.EventoService.getListAreaResponsable(parametro[0]).subscribe((resp: any) => {
         this.listAreaResponsable = resp.list;
-        console.log('AREA_RESP', resp);
+        // console.log('AREA_RESP', resp);
       });
   }
 
@@ -219,9 +177,7 @@ export class RegistroEventoComponent implements OnInit {
     this.spinner.show();
 
     if (this.totalfiltro != this.totalPersonal) {
-      this.EventoService
-        .cargarOBuscarEvento(offset.toString())
-        .subscribe((resp: any) => {
+      this.EventoService.cargarOBuscarEvento(offset.toString()).subscribe((resp: any) => {
           this.listaEventos = resp.list;
           this.spinner.hide();
         });
@@ -233,7 +189,6 @@ export class RegistroEventoComponent implements OnInit {
 
   crearEvento() {
     const dialogRef = this.dialog.open(ModalEventoComponent, { width: '70%', height: '90%'});
-
     dialogRef.afterClosed().subscribe((resp) => {
       if (resp) {
         this.cargarOBuscarEvento();
@@ -245,8 +200,7 @@ export class RegistroEventoComponent implements OnInit {
     console.log('DATA_EVENTO', DATA);
 
     const dialogRef = this.dialog.open(ModalEventoComponent, { width: '70%', height: '95%', data: DATA});
-
-      dialogRef.afterClosed().subscribe((resp) => {
+    dialogRef.afterClosed().subscribe((resp) => {
         if (resp) {
           this.cargarOBuscarEvento();
         }
@@ -257,7 +211,6 @@ export class RegistroEventoComponent implements OnInit {
     console.log('DATA_DETALLE', dataDetalle);
 
     const dialogRef = this.dialog.open(ModalDetalleComponent, { width: '60%',data: dataDetalle});
-
     dialogRef.afterClosed().subscribe((resp) => {
       if (resp) {
         this.cargarOBuscarEvento();
